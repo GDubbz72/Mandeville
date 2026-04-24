@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { supabase } from "./lib/supabase";
 import {
   ArrowUpRight,
   Shield,
@@ -23,6 +24,8 @@ import {
 export default function MandevilleLanding() {
   const [scrollY, setScrollY] = useState(0);
   const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [subscribed, setSubscribed] = useState(false);
   const [openFaq, setOpenFaq] = useState(0);
   const [activeSection, setActiveSection] = useState("overview");
@@ -51,28 +54,27 @@ export default function MandevilleLanding() {
     e?.preventDefault();
     if (email && email.includes("@")) {
       setIsSubmitting(true);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      const payload = {
+
+      const { error } = await supabase.from("subscribers").insert({
         email,
-        investorType,
+        first_name: firstName || null,
+        last_name: lastName || null,
+        investor_type: investorType,
         interests,
-        timestamp: new Date().toISOString(),
-      };
-      
-      // Mock persistent storage
-      const subscribers = JSON.parse(localStorage.getItem('mandeville_subscribers') || '[]');
-      subscribers.push(payload);
-      localStorage.setItem('mandeville_subscribers', JSON.stringify(subscribers));
-      
-      console.log('Subscription received:', payload);
-      
+      });
+
       setIsSubmitting(false);
+
+      if (error) {
+        console.error("Subscription failed:", error);
+        return;
+      }
+
       setSubscribed(true);
       setTimeout(() => setSubscribed(false), 5000);
       setEmail("");
+      setFirstName("");
+      setLastName("");
     }
   };
 
@@ -80,23 +82,21 @@ export default function MandevilleLanding() {
     e?.preventDefault();
     if (contactForm.name && contactForm.email && contactForm.message) {
       setIsSubmitting(true);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      const payload = {
-        ...contactForm,
-        timestamp: new Date().toISOString(),
-      };
-      
-      // Mock persistent storage
-      const inquiries = JSON.parse(localStorage.getItem('mandeville_inquiries') || '[]');
-      inquiries.push(payload);
-      localStorage.setItem('mandeville_inquiries', JSON.stringify(inquiries));
-      
-      console.log('Contact inquiry received:', payload);
-      
+
+      const { error } = await supabase.from("inquiries").insert({
+        name: contactForm.name,
+        email: contactForm.email,
+        firm: contactForm.firm || null,
+        message: contactForm.message,
+      });
+
       setIsSubmitting(false);
+
+      if (error) {
+        console.error("Inquiry failed:", error);
+        return;
+      }
+
       setContactSuccess(true);
       setTimeout(() => {
         setContactSuccess(false);
@@ -267,15 +267,7 @@ export default function MandevilleLanding() {
       {/* ============ NAV ============ */}
       <nav className="sticky top-0 z-40 bg-[#F4F1EA]/85 backdrop-blur-md border-b border-[#0A0E1A]/10">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-5 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-[#0A0E1A] flex items-center justify-center">
-              <div className="w-3 h-3 border border-[#F4F1EA] rotate-45"></div>
-            </div>
-            <div>
-              <div className="font-display text-lg font-500 leading-none">Mandeville</div>
-              <div className="font-mono text-[9px] tracking-[0.2em] opacity-60 mt-0.5">VENTURES INC.</div>
-            </div>
-          </div>
+          <img src="/logo.svg" alt="Mandeville Ventures Inc." style={{ maxWidth: "350px", width: "100%", maxHeight: "135px", padding: "5px" }} />
 
           <div className="hidden lg:flex items-center gap-1">
             {navItems.map((item) => (
@@ -708,6 +700,30 @@ export default function MandevilleLanding() {
                 </div>
               </div>
 
+              {/* Name inputs */}
+              <div className="mb-6 grid grid-cols-2 gap-px">
+                <div>
+                  <label className="font-mono text-[10px] tracking-[0.2em] opacity-50 block mb-3">FIRST NAME</label>
+                  <input
+                    type="text"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    placeholder="Jane"
+                    className="w-full bg-[#1F2737] text-[#F4F1EA] px-5 py-4 font-body text-sm placeholder:text-[#F4F1EA]/30 focus:outline-none focus:bg-[#2A3447]"
+                  />
+                </div>
+                <div>
+                  <label className="font-mono text-[10px] tracking-[0.2em] opacity-50 block mb-3">LAST NAME</label>
+                  <input
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    placeholder="Doe"
+                    className="w-full bg-[#1F2737] text-[#F4F1EA] px-5 py-4 font-body text-sm placeholder:text-[#F4F1EA]/30 focus:outline-none focus:bg-[#2A3447]"
+                  />
+                </div>
+              </div>
+
               {/* Email input */}
               <div>
                 <label className="font-mono text-[10px] tracking-[0.2em] opacity-50 block mb-3">EMAIL ADDRESS</label>
@@ -921,14 +937,9 @@ export default function MandevilleLanding() {
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-12">
           <div className="grid lg:grid-cols-12 gap-8 mb-12">
             <div className="lg:col-span-4">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 bg-[#F4F1EA] flex items-center justify-center">
-                  <div className="w-3 h-3 border border-[#0A0E1A] rotate-45"></div>
-                </div>
-                <div>
-                  <div className="font-display text-lg font-500 leading-none">Mandeville Ventures Inc.</div>
-                  <div className="font-mono text-[9px] tracking-[0.2em] opacity-60 mt-0.5">TSXV: MAND.V</div>
-                </div>
+              <div className="mb-4">
+                <img src="/logo-reverse.svg" alt="Mandeville Ventures Inc." style={{ maxWidth: "200px", width: "100%", marginBottom: "8px" }} />
+                <div className="font-mono text-[9px] tracking-[0.2em] opacity-60">TSXV: MAND.V</div>
               </div>
               <p className="font-body text-sm opacity-65 leading-relaxed max-w-sm">
                 A Capital Pool Company listed on the TSX Venture Exchange. Currently advancing a Qualifying Transaction with Quantropi Inc.
