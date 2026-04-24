@@ -56,6 +56,7 @@ export default function MandevilleLanding() {
       setIsSubmitting(true);
 
       if (supabase) {
+        console.log("Submitting subscriber:", { email, firstName, lastName, investorType, interests });
         const { error } = await supabase.from("subscribers").insert({
           email,
           first_name: firstName || null,
@@ -69,6 +70,9 @@ export default function MandevilleLanding() {
           setIsSubmitting(false);
           return;
         }
+        console.log("Subscription successful");
+      } else {
+        console.warn("Supabase not configured - form will not save data");
       }
 
       setIsSubmitting(false);
@@ -86,6 +90,7 @@ export default function MandevilleLanding() {
       setIsSubmitting(true);
 
       if (supabase) {
+        console.log("Submitting inquiry:", contactForm);
         const { error } = await supabase.from("inquiries").insert({
           name: contactForm.name,
           email: contactForm.email,
@@ -98,6 +103,9 @@ export default function MandevilleLanding() {
           setIsSubmitting(false);
           return;
         }
+        console.log("Inquiry submitted successfully");
+      } else {
+        console.warn("Supabase not configured - form will not save data");
       }
 
       setIsSubmitting(false);
