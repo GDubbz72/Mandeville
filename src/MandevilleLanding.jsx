@@ -55,21 +55,23 @@ export default function MandevilleLanding() {
     if (email && email.includes("@")) {
       setIsSubmitting(true);
 
-      const { error } = await supabase.from("subscribers").insert({
-        email,
-        first_name: firstName || null,
-        last_name: lastName || null,
-        investor_type: investorType,
-        interests,
-      });
+      if (supabase) {
+        const { error } = await supabase.from("subscribers").insert({
+          email,
+          first_name: firstName || null,
+          last_name: lastName || null,
+          investor_type: investorType,
+          interests,
+        });
 
-      setIsSubmitting(false);
-
-      if (error) {
-        console.error("Subscription failed:", error);
-        return;
+        if (error) {
+          console.error("Subscription failed:", error);
+          setIsSubmitting(false);
+          return;
+        }
       }
 
+      setIsSubmitting(false);
       setSubscribed(true);
       setTimeout(() => setSubscribed(false), 5000);
       setEmail("");
@@ -83,20 +85,22 @@ export default function MandevilleLanding() {
     if (contactForm.name && contactForm.email && contactForm.message) {
       setIsSubmitting(true);
 
-      const { error } = await supabase.from("inquiries").insert({
-        name: contactForm.name,
-        email: contactForm.email,
-        firm: contactForm.firm || null,
-        message: contactForm.message,
-      });
+      if (supabase) {
+        const { error } = await supabase.from("inquiries").insert({
+          name: contactForm.name,
+          email: contactForm.email,
+          firm: contactForm.firm || null,
+          message: contactForm.message,
+        });
 
-      setIsSubmitting(false);
-
-      if (error) {
-        console.error("Inquiry failed:", error);
-        return;
+        if (error) {
+          console.error("Inquiry failed:", error);
+          setIsSubmitting(false);
+          return;
+        }
       }
 
+      setIsSubmitting(false);
       setContactSuccess(true);
       setTimeout(() => {
         setContactSuccess(false);
