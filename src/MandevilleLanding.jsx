@@ -166,24 +166,28 @@ export default function MandevilleLanding() {
       role: "Chief Executive Officer & Director",
       bio: "Founder of Mandeville's CPC platform. Currently CEO of Focus Graphite Inc. and Stria Lithium Inc. Track record in capital structuring and public market transitions.",
       tag: "Founder",
+      image: "/dean.jpg",
     },
     {
       name: "John Kutkevicious",
       role: "Director",
       bio: "Tax lawyer specializing in income tax and estate planning. Member of the Canadian Tax Foundation. Former Chairman of Nevada Silver Corporation.",
       tag: "Legal & Tax",
+      image: "/john.jpg",
     },
     {
       name: "Robin Dow",
       role: "Director",
       bio: "40+ years in venture capital. Raised ~$200M across 30+ companies. Founder of Ur-Energy Inc. (taken public 2005). Currently CEO of Nevada Organic Phosphate.",
       tag: "Capital Markets",
+      image: "/robin.jpg",
     },
     {
       name: "Rick Kumar",
       role: "Director",
       bio: "Founder, President & CEO of MultiCraft. Two decades building international distribution operations across Canada, US, and global markets.",
       tag: "Operations",
+      image: "/rick.jpg",
     },
   ];
 
@@ -209,9 +213,9 @@ export default function MandevilleLanding() {
   return (
     <div className="min-h-screen bg-[#F4F1EA] text-[#0A0E1A] font-sans antialiased">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
-        .font-display { font-family: 'Fraunces', serif; font-optical-sizing: auto; }
+        .font-display { font-family: 'Playfair Display', serif; }
         .font-body { font-family: 'Inter', sans-serif; }
         .font-mono { font-family: 'JetBrains Mono', monospace; }
 
@@ -602,10 +606,12 @@ export default function MandevilleLanding() {
                 key={i}
                 className="bg-[#0A0E1A] p-8 group hover:bg-[#1F2737] transition-colors cursor-default"
               >
-                <div className="aspect-square bg-[#1F2737] mb-6 relative overflow-hidden flex items-center justify-center">
-                  <div className="font-display text-7xl text-[#F4F1EA]/20 group-hover:text-[#F4F1EA]/40 transition-colors">
-                    {person.name.split(" ").map((n) => n[0]).join("")}
-                  </div>
+                <div className="aspect-square bg-[#1F2737] mb-6 relative overflow-hidden">
+                  <img
+                    src={person.image}
+                    alt={person.name}
+                    className="w-full h-full object-cover"
+                  />
                   <div className="absolute top-3 left-3 font-mono text-[9px] tracking-[0.2em] bg-[#5B4B3A] text-[#F4F1EA] px-2 py-1">
                     {person.tag.toUpperCase()}
                   </div>
@@ -979,7 +985,7 @@ export default function MandevilleLanding() {
             <div className="lg:col-span-4">
               <div className="font-mono text-[10px] tracking-[0.25em] opacity-50 mb-4">CONTACT</div>
               <a href="mailto:investors@mandevilleventures.com" className="font-display text-xl font-400 underline-link inline-block mb-2">
-                investors@mandevilleventures.com
+                investors@mandcpc.com
               </a>
               <p className="font-body text-xs opacity-60 leading-relaxed">
                 Toronto, Ontario · Canada
