@@ -359,8 +359,8 @@ export default function MandevilleLanding() {
             </div>
 
             <h1 className="font-display text-[42px] sm:text-[60px] lg:text-[88px] leading-[0.95] font-400 tracking-[-0.02em] mb-8">
-              Capital structured for the{" "}
-              <span className="italic font-300 text-[#5B4B3A]">post-quantum</span> transition.
+              Actively Pursuing a{" "}
+              <span className="italic font-300 text-[#5B4B3A]">Quantum</span> Trasaction.
             </h1>
 
             <p className="font-body text-lg lg:text-xl text-[#0A0E1A]/70 max-w-2xl leading-relaxed mb-10">
