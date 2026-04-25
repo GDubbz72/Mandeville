@@ -40,6 +40,7 @@ export default function MandevilleLanding() {
   const [contactModalOpen, setContactModalOpen] = useState(false);
   const [contactForm, setContactForm] = useState({ name: "", email: "", firm: "", message: "" });
   const [contactSuccess, setContactSuccess] = useState(false);
+  const [pressReleasesModalOpen, setPressReleasesModalOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
@@ -188,6 +189,27 @@ export default function MandevilleLanding() {
       bio: "Founder, President & CEO of MultiCraft. Two decades building international distribution operations across Canada, US, and global markets.",
       tag: "Operations",
       image: "/rick.jpg",
+    },
+  ];
+
+  const pressReleases = [
+    {
+      date: "2026-04-24",
+      title: "Mandeville Advances Qualifying Transaction with Quantropi Inc.",
+      summary: "Definitive agreement targeted for Q2 2026. Quantropi's QiSpace™ platform brings institutional-grade quantum-secure encryption to enterprise, IoT, and defense sectors.",
+      url: "#",
+    },
+    {
+      date: "2026-03-15",
+      title: "Mandeville Completes Management Review and Board Expansion",
+      summary: "Board strengthened with addition of experienced capital markets and operational advisors to support execution of Qualifying Transaction.",
+      url: "#",
+    },
+    {
+      date: "2026-02-10",
+      title: "Mandeville Initiates CPC Prospectus Filing",
+      summary: "Official prospectus filed on TSX Venture Exchange. Company maintains CAD $1.25–$1.30M in cash with ~26.5M shares outstanding.",
+      url: "#",
     },
   ];
 
@@ -948,6 +970,48 @@ export default function MandevilleLanding() {
             </div>
           </div>
         )}
+
+        {pressReleasesModalOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center px-6 overflow-y-auto">
+            <div
+              className="absolute inset-0 bg-[#0A0E1A]/80 backdrop-blur-sm"
+              onClick={() => setPressReleasesModalOpen(false)}
+            ></div>
+            <div className="relative bg-[#F4F1EA] text-[#0A0E1A] w-full max-w-2xl p-8 lg:p-12 fade-up my-8">
+              <button
+                onClick={() => setPressReleasesModalOpen(false)}
+                className="absolute top-6 right-6 text-[#0A0E1A]/40 hover:text-[#0A0E1A] transition-colors"
+              >
+                <Plus className="w-6 h-6 rotate-45" />
+              </button>
+
+              <div className="font-mono text-[10px] tracking-[0.25em] text-[#5B4B3A] mb-6">/ NEWS & UPDATES</div>
+              <h3 className="font-display text-3xl lg:text-4xl font-400 mb-10">Press <span className="italic">Releases.</span></h3>
+
+              <div className="space-y-8 max-h-[60vh] overflow-y-auto">
+                {pressReleases.map((release, i) => (
+                  <div key={i} className={`pb-8 ${i !== pressReleases.length - 1 ? 'border-b border-[#0A0E1A]/10' : ''}`}>
+                    <div className="font-mono text-[9px] tracking-[0.2em] text-[#5B4B3A] mb-2">
+                      {new Date(release.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    </div>
+                    <h4 className="font-display text-lg font-500 mb-3">{release.title}</h4>
+                    <p className="font-body text-sm text-[#0A0E1A]/70 leading-relaxed mb-4">{release.summary}</p>
+                    <a href={release.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-body text-[#0A0E1A] hover:text-[#5B4B3A] transition-colors underline">
+                      Read More <ArrowRight className="w-3 h-3" />
+                    </a>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-8 pt-8 border-t border-[#0A0E1A]/10">
+                <p className="font-body text-xs text-[#0A0E1A]/60 mb-4">For official regulatory filings and formal announcements, please visit:</p>
+                <a href="https://www.sedarplus.ca" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#0A0E1A] text-[#F4F1EA] px-6 py-3 font-body text-sm hover:bg-[#1F2737] transition-all">
+                  SEDAR+ Filings <ArrowRight className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* ============ FOOTER ============ */}
@@ -967,18 +1031,18 @@ export default function MandevilleLanding() {
             <div className="lg:col-span-2">
               <div className="font-mono text-[10px] tracking-[0.25em] opacity-50 mb-4">COMPANY</div>
               <ul className="space-y-2 font-body text-sm">
-                <li><a href="#" className="underline-link opacity-80 hover:opacity-100">About</a></li>
-                <li><a href="#" className="underline-link opacity-80 hover:opacity-100">Leadership</a></li>
-                <li><a href="#" className="underline-link opacity-80 hover:opacity-100">Transaction</a></li>
+                <li><a href="#overview" className="underline-link opacity-80 hover:opacity-100">About</a></li>
+                <li><a href="#leadership" className="underline-link opacity-80 hover:opacity-100">Leadership</a></li>
+                <li><a href="#transaction" className="underline-link opacity-80 hover:opacity-100">Transaction</a></li>
               </ul>
             </div>
 
             <div className="lg:col-span-2">
               <div className="font-mono text-[10px] tracking-[0.25em] opacity-50 mb-4">INVESTORS</div>
               <ul className="space-y-2 font-body text-sm">
-                <li><a href="#" className="underline-link opacity-80 hover:opacity-100">SEDAR+ Filings</a></li>
-                <li><a href="#" className="underline-link opacity-80 hover:opacity-100">Press Releases</a></li>
-                <li><a href="#" className="underline-link opacity-80 hover:opacity-100">Subscribe</a></li>
+                <li><a href="https://www.sedarplus.ca" target="_blank" rel="noopener noreferrer" className="underline-link opacity-80 hover:opacity-100">SEDAR+ Filings</a></li>
+                <li><button onClick={() => setPressReleasesModalOpen(true)} className="underline-link opacity-80 hover:opacity-100 bg-none border-none p-0 cursor-pointer text-[#F4F1EA]">Press Releases</button></li>
+                <li><a href="#subscribe" className="underline-link opacity-80 hover:opacity-100">Subscribe</a></li>
               </ul>
             </div>
 
